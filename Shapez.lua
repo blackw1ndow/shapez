@@ -5,7 +5,7 @@ script_name('Shapez '..version..'')
 local mX, mY = getScreenResolution()
 local dlstatus = require('moonloader').download_status
 local update_url = 'https://raw.githubusercontent.com/blackw1ndow/shapez/main/update.ini'
-local update_path = getWorkingDirectory() .. "/update.ini" -- и тут свою ссылку
+local update_path = getWorkingDirectory() .. "/update.ini" -- Рё С‚СѓС‚ СЃРІРѕСЋ СЃСЃС‹Р»РєСѓ
 local script_url = 'https://raw.githubusercontent.com/blackw1ndow/shapez/main/Shapez.lua'
 local script_path = thisScript().path
 local inicfg = require 'inicfg'
@@ -31,9 +31,9 @@ local encoding = require 'encoding'
 encoding.default = 'CP1251'
 u8 = encoding.UTF8
 
-local modes = {u8'Обычная', u8'Новая', u8'Серверная'}
-local keyboard_modes = {u8'Только цифры', u8'Компактные цифры', u8'Только NumPad'}
-local tmodes = {u8'Фиолетовая', u8'Бирюзовая', u8'Красная', u8'Салатовая', u8'Синяя', u8'Серая'}
+local modes = {u8'РћР±С‹С‡РЅР°СЏ', u8'РќРѕРІР°СЏ', u8'РЎРµСЂРІРµСЂРЅР°СЏ'}
+local keyboard_modes = {u8'РўРѕР»СЊРєРѕ С†РёС„СЂС‹', u8'РљРѕРјРїР°РєС‚РЅС‹Рµ С†РёС„СЂС‹', u8'РўРѕР»СЊРєРѕ NumPad'}
+local tmodes = {u8'Р¤РёРѕР»РµС‚РѕРІР°СЏ', u8'Р‘РёСЂСЋР·РѕРІР°СЏ', u8'РљСЂР°СЃРЅР°СЏ', u8'РЎР°Р»Р°С‚РѕРІР°СЏ', u8'РЎРёРЅСЏСЏ', u8'РЎРµСЂР°СЏ'}
 
 local config = inicfg.load({
     main = {
@@ -103,14 +103,6 @@ local config = inicfg.load({
         ncode = 0,
         code = 0,
     },
-    secret = {
-        max5 = false,
-        nClear = false,
-		auton = false,
-		waitauton = 0,
-		waitautoenter = 0,
-		waitautozero = 0,
-    }
 }, "Shapez")
 
 local trainkey = {
@@ -171,9 +163,6 @@ fhb.v = string.gsub(tostring(fhb.v), '"', '')
 fbb = imgui.ImBuffer(tostring(config.commands.fbc), 100)
 fbb.v = string.gsub(tostring(fbb.v), '"', '')
 result = imgui.ImInt(0)
-waitauton = imgui.ImInt(config.secret.waitauton)
-waitautozero = imgui.ImInt(config.secret.waitautozero)
-waitautoenter = imgui.ImInt(config.secret.waitautoenter)
 keyboard_pos = imgui.ImVec2(config.keyboard.x, config.keyboard.y)
 keyboard_type = imgui.ImInt(config.keyboard.mode)
 temki = imgui.ImInt(config.main.theme)
@@ -196,7 +185,6 @@ function imgui.BeforeDrawFrame()
 end
 
 local main_window_state = imgui.ImBool(false)
-local secret_window_state = imgui.ImBool(false)
 local vip_window_state = imgui.ImBool(false)
 local servertime = imgui.ImBool(false)
 local keyboard = imgui.ImBool(config.keyboard.active)
@@ -678,30 +666,30 @@ function imgui.OnDrawFrame()
             imgui.EndChild()
             imgui.BeginChild('bot', imgui.ImVec2(465, 226), true) 
             if menu == 1 then
-                if imgui.Checkbox(u8'Таймер ввода капчи', imgui.ImBool(config.main.timer)) then config.main.timer = not config.main.timer end
-                if imgui.Checkbox(u8'Время ввода в строке с покупкой дома/бизнеса', imgui.ImBool(config.main.jt)) then config.main.jt = not config.main.jt end
-                if imgui.Checkbox(u8'Перекраска сообщений о покупке дома/бизнеса', imgui.ImBool(config.main.recolor)) then config.main.recolor = not config.main.recolor end
-                if imgui.Checkbox(u8'Сообщение в чат после покупки имущества', imgui.ImBool(config.main.msg)) then config.main.msg = not config.main.msg end
+                if imgui.Checkbox(u8'РўР°Р№РјРµСЂ РІРІРѕРґР° РєР°РїС‡Рё', imgui.ImBool(config.main.timer)) then config.main.timer = not config.main.timer end
+                if imgui.Checkbox(u8'Р’СЂРµРјСЏ РІРІРѕРґР° РІ СЃС‚СЂРѕРєРµ СЃ РїРѕРєСѓРїРєРѕР№ РґРѕРјР°/Р±РёР·РЅРµСЃР°', imgui.ImBool(config.main.jt)) then config.main.jt = not config.main.jt end
+                if imgui.Checkbox(u8'РџРµСЂРµРєСЂР°СЃРєР° СЃРѕРѕР±С‰РµРЅРёР№ Рѕ РїРѕРєСѓРїРєРµ РґРѕРјР°/Р±РёР·РЅРµСЃР°', imgui.ImBool(config.main.recolor)) then config.main.recolor = not config.main.recolor end
+                if imgui.Checkbox(u8'РЎРѕРѕР±С‰РµРЅРёРµ РІ С‡Р°С‚ РїРѕСЃР»Рµ РїРѕРєСѓРїРєРё РёРјСѓС‰РµСЃС‚РІР°', imgui.ImBool(config.main.msg)) then config.main.msg = not config.main.msg end
 
                 if config.main.msg then
                         if imgui.InputText('##1', buffer) then
                             config.main.text = string.format('%s', tostring(buffer.v))
                         end
-                    if imgui.Checkbox(u8'Добавлять время во фразу', imgui.ImBool(config.main.texttime)) then config.main.texttime = not config.main.texttime end 
-                    if imgui.Checkbox(u8'Добавлять капчу во фразу', imgui.ImBool(config.main.textcap)) then config.main.textcap = not config.main.textcap end 
+                    if imgui.Checkbox(u8'Р”РѕР±Р°РІР»СЏС‚СЊ РІСЂРµРјСЏ РІРѕ С„СЂР°Р·Сѓ', imgui.ImBool(config.main.texttime)) then config.main.texttime = not config.main.texttime end 
+                    if imgui.Checkbox(u8'Р”РѕР±Р°РІР»СЏС‚СЊ РєР°РїС‡Сѓ РІРѕ С„СЂР°Р·Сѓ', imgui.ImBool(config.main.textcap)) then config.main.textcap = not config.main.textcap end 
                 end
-                if imgui.Checkbox(u8'Укороченные команды поиска домов/бизнесов', imgui.ImBool(config.main.shorten)) then config.main.shorten = not config.main.shorten end
+                if imgui.Checkbox(u8'РЈРєРѕСЂРѕС‡РµРЅРЅС‹Рµ РєРѕРјР°РЅРґС‹ РїРѕРёСЃРєР° РґРѕРјРѕРІ/Р±РёР·РЅРµСЃРѕРІ', imgui.ImBool(config.main.shorten)) then config.main.shorten = not config.main.shorten end
 
                 if config.main.shorten then
                     imgui.SameLine()
                     if imgui.Button(fa.ICON_FA_TRASH ..u8'') then 
-                        sampAddChatMessage(tag ..'Укороченные команды удалены!', -1) 
+                        sampAddChatMessage(tag ..'РЈРєРѕСЂРѕС‡РµРЅРЅС‹Рµ РєРѕРјР°РЅРґС‹ СѓРґР°Р»РµРЅС‹!', -1) 
                         sampUnregisterChatCommand(config.commands.fhc) 
                         sampUnregisterChatCommand(config.commands.fbc) 
                     end
                     imgui.SameLine()
                     if imgui.Button(fa.ICON_FA_SAVE ..u8'') then 
-                        sampAddChatMessage(tag ..'Укороченные команды добавлены!', -1) 
+                        sampAddChatMessage(tag ..'РЈРєРѕСЂРѕС‡РµРЅРЅС‹Рµ РєРѕРјР°РЅРґС‹ РґРѕР±Р°РІР»РµРЅС‹!', -1) 
                         sampRegisterChatCommand(config.commands.fhc, function(num) sampSendChat('/findihouse '..num) end) 
                         sampRegisterChatCommand(config.commands.fbc, function(num) sampSendChat('/findibiz '..num) end)
                     end
@@ -719,7 +707,7 @@ function imgui.OnDrawFrame()
                 end
             end
             if menu == 2 then
-                if imgui.Checkbox(u8'Тренировка капчи', imgui.ImBool(config.main.captrain)) then config.main.captrain = not config.main.captrain end 
+                if imgui.Checkbox(u8'РўСЂРµРЅРёСЂРѕРІРєР° РєР°РїС‡Рё', imgui.ImBool(config.main.captrain)) then config.main.captrain = not config.main.captrain end 
                 if config.main.captrain then 
                     imgui.SameLine()
                     ia.HotKey('##captrain', trainkey, {}, 100)
@@ -733,7 +721,7 @@ function imgui.OnDrawFrame()
                     end
 					imgui.PopItemWidth()
                 end
-                if imgui.Checkbox(u8'Антирванка', imgui.ImBool(config.main.ar)) then config.main.ar = not config.main.ar end 
+                if imgui.Checkbox(u8'РђРЅС‚РёСЂРІР°РЅРєР°', imgui.ImBool(config.main.ar)) then config.main.ar = not config.main.ar end 
                 if config.main.ar then
                     imgui.SameLine()
                     imgui.PushItemWidth(110)
@@ -742,7 +730,7 @@ function imgui.OnDrawFrame()
                     end
 					imgui.PopItemWidth()
                 end
-                if imgui.Checkbox(u8'Удаление людей', imgui.ImBool(config.main.delp)) then config.main.delp = not config.main.delp end 
+                if imgui.Checkbox(u8'РЈРґР°Р»РµРЅРёРµ Р»СЋРґРµР№', imgui.ImBool(config.main.delp)) then config.main.delp = not config.main.delp end 
                 if config.main.delp then
                     imgui.SameLine()
                     imgui.PushItemWidth(90)
@@ -750,7 +738,7 @@ function imgui.OnDrawFrame()
                         config.commands.delpc = string.format('%s', tostring(delpbuf.v))
                     end
                 end
-                if imgui.Checkbox(u8'Удаление машин', imgui.ImBool(config.main.delc)) then config.main.delc = not config.main.delc end 
+                if imgui.Checkbox(u8'РЈРґР°Р»РµРЅРёРµ РјР°С€РёРЅ', imgui.ImBool(config.main.delc)) then config.main.delc = not config.main.delc end 
                 if config.main.delc then
                     imgui.SameLine()
                     imgui.PushItemWidth(90)
@@ -759,7 +747,7 @@ function imgui.OnDrawFrame()
                     end
 					imgui.PopItemWidth()
                 end
-                if imgui.Checkbox(u8'Изменение прорисовки', imgui.ImBool(config.main.fd)) then config.main.fd = not config.main.fd end 
+                if imgui.Checkbox(u8'РР·РјРµРЅРµРЅРёРµ РїСЂРѕСЂРёСЃРѕРІРєРё', imgui.ImBool(config.main.fd)) then config.main.fd = not config.main.fd end 
                 if config.main.fd then
                     imgui.SameLine()
                     imgui.PushItemWidth(90)
@@ -788,42 +776,42 @@ function imgui.OnDrawFrame()
                         elseif keyboard_type.v == 2 then config.keyboard.mode = 2
                     end	
 					imgui.PopItemWidth()
-                    if imgui.Checkbox(u8'Перемещать клавиатуру', imgui.ImBool(config.keyboard.move)) then config.keyboard.move = not config.keyboard.move end
+                    if imgui.Checkbox(u8'РџРµСЂРµРјРµС‰Р°С‚СЊ РєР»Р°РІРёР°С‚СѓСЂСѓ', imgui.ImBool(config.keyboard.move)) then config.keyboard.move = not config.keyboard.move end
                 end
-                if imgui.Checkbox(u8'Время на экране', imgui.ImBool(config.servertime.stime)) then config.servertime.stime = not config.servertime.stime end
+                if imgui.Checkbox(u8'Р’СЂРµРјСЏ РЅР° СЌРєСЂР°РЅРµ', imgui.ImBool(config.servertime.stime)) then config.servertime.stime = not config.servertime.stime end
                 if config.servertime.stime then
                     imgui.SameLine()
                     if imgui.Button(fa.ICON_FA_COGS ..u8'') then servertime.v = not servertime.v end
                 end
             end
             if menu == 3 then
-                if imgui.Checkbox(u8'Бинд на быстрый вызор NRG-500', imgui.ImBool(config.binds.fastnrg)) then config.binds.fastnrg = not config.binds.fastnrg end
+                if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂС‹Р№ РІС‹Р·РѕСЂ NRG-500', imgui.ImBool(config.binds.fastnrg)) then config.binds.fastnrg = not config.binds.fastnrg end
                 if config.binds.fastnrg then
                 imgui.SameLine()
                 ia.HotKey('##nrgkey', nrgkey, {}, 100)
                 end 
-                if imgui.Checkbox(u8'Бинд на быстрый спавн', imgui.ImBool(config.binds.fastspawn)) then config.binds.fastspawn = not config.binds.fastspawn end
+                if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂС‹Р№ СЃРїР°РІРЅ', imgui.ImBool(config.binds.fastspawn)) then config.binds.fastspawn = not config.binds.fastspawn end
                 if config.binds.fastspawn then
                 imgui.SameLine()
                 ia.HotKey('##spawnkey', spawnkey, {}, 100)
                 end 
-                if imgui.Checkbox(u8'Бинд на быстрое пополнение 100 хп', imgui.ImBool(config.binds.fasthp)) then config.binds.fasthp = not config.binds.fasthp end
+                if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂРѕРµ РїРѕРїРѕР»РЅРµРЅРёРµ 100 С…Рї', imgui.ImBool(config.binds.fasthp)) then config.binds.fasthp = not config.binds.fasthp end
                 if config.binds.fasthp then
                 imgui.SameLine()
                 ia.HotKey('##hpkey', hpkey, {}, 100)
                 end 
-                if imgui.Checkbox(u8'Бинд на быстрый флип', imgui.ImBool(config.binds.fastflip)) then config.binds.fastflip = not config.binds.fastflip end
+                if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂС‹Р№ С„Р»РёРї', imgui.ImBool(config.binds.fastflip)) then config.binds.fastflip = not config.binds.fastflip end
                 if config.binds.fastflip then
                 imgui.SameLine()
                 ia.HotKey('##flipkey', flipkey, {}, 100)
                 end 
-                if imgui.Checkbox(u8'Бинд на быструю заправку', imgui.ImBool(config.binds.fastfill)) then config.binds.fastfill = not config.binds.fastfill end
+                if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂСѓСЋ Р·Р°РїСЂР°РІРєСѓ', imgui.ImBool(config.binds.fastfill)) then config.binds.fastfill = not config.binds.fastfill end
                 if config.binds.fastfill then
                 imgui.SameLine()
                 ia.HotKey('##fillkey', fillkey, {}, 100)
                 end 
-                if supremeMode or locked then if imgui.Checkbox(u8'Бинд на быструю проверку слетов в /sletmenu', imgui.ImBool(config.binds.fastslet)) then config.binds.fastslet = not config.binds.fastslet end
-				elseif arenaMode then if imgui.Checkbox(u8'Бинд на быструю телепортацию своего авто к себе', imgui.ImBool(config.binds.fastslet)) then config.binds.fastslet = not config.binds.fastslet end
+                if supremeMode or locked then if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂСѓСЋ РїСЂРѕРІРµСЂРєСѓ СЃР»РµС‚РѕРІ РІ /sletmenu', imgui.ImBool(config.binds.fastslet)) then config.binds.fastslet = not config.binds.fastslet end
+				elseif arenaMode then if imgui.Checkbox(u8'Р‘РёРЅРґ РЅР° Р±С‹СЃС‚СЂСѓСЋ С‚РµР»РµРїРѕСЂС‚Р°С†РёСЋ СЃРІРѕРµРіРѕ Р°РІС‚Рѕ Рє СЃРµР±Рµ', imgui.ImBool(config.binds.fastslet)) then config.binds.fastslet = not config.binds.fastslet end
 				end
                 if config.binds.fastslet then
                 imgui.SameLine()
@@ -831,91 +819,67 @@ function imgui.OnDrawFrame()
                 end
             end
             if menu == 4 then
-			    if imgui.IsItemClicked() then secret_window_state.v = not secret_window_state.v end
                 imgui.PushItemWidth(110)
-                if imgui.Combo(u8'Темы скрипта', temki, tmodes) then styles[temki.v]() createlogo() end
+                if imgui.Combo(u8'РўРµРјС‹ СЃРєСЂРёРїС‚Р°', temki, tmodes) then styles[temki.v]() createlogo() end
 				imgui.PopItemWidth()
-                if imgui.Checkbox(u8'Другие цвета в логотипе', imgui.ImBool(config.main.customlogo)) then config.main.customlogo = not config.main.customlogo end
+                if imgui.Checkbox(u8'Р”СЂСѓРіРёРµ С†РІРµС‚Р° РІ Р»РѕРіРѕС‚РёРїРµ', imgui.ImBool(config.main.customlogo)) then config.main.customlogo = not config.main.customlogo end
                 if config.main.customlogo then
                     if imgui.Button(fa.ICON_FA_SAVE ..u8'', imgui.SameLine()) then createlogo() end
 					if imgui.Button(fa.ICON_FA_TRASH ..u8'', imgui.SameLine()) then deletelogo() end
                 end
-                if imgui.Checkbox(u8'Анти-подкид лицензий, трейда и скиллов', imgui.ImBool(config.main.antipodkid)) then config.main.antipodkid = not config.main.antipodkid end
+                if imgui.Checkbox(u8'РђРЅС‚Рё-РїРѕРґРєРёРґ Р»РёС†РµРЅР·РёР№, С‚СЂРµР№РґР° Рё СЃРєРёР»Р»РѕРІ', imgui.ImBool(config.main.antipodkid)) then config.main.antipodkid = not config.main.antipodkid end
                 imgui.Separator()
-                imgui.Text(u8'Информация по вводу капчи:')
-                imgui.Text(u8'Всего капч введено: '..config.captcha.vcode + config.captcha.ncode)
-                imgui.Text(u8'Верных кодов: '..config.captcha.vcode)
-                imgui.Text(u8'Неверных кодов: '..config.captcha.ncode)
-                imgui.Text(u8'Рекорд ввода капчи: '..config.captcha.record)
-				imgui.SameLine(445)
-                imgui.TextColored(imgui.ImVec4(0.15, 0.18, 0.22, 1.00), u8'xyi123')
+                imgui.Text(u8'РРЅС„РѕСЂРјР°С†РёСЏ РїРѕ РІРІРѕРґСѓ РєР°РїС‡Рё:')
+                imgui.Text(u8'Р’СЃРµРіРѕ РєР°РїС‡ РІРІРµРґРµРЅРѕ: '..config.captcha.vcode + config.captcha.ncode)
+                imgui.Text(u8'Р’РµСЂРЅС‹С… РєРѕРґРѕРІ: '..config.captcha.vcode)
+                imgui.Text(u8'РќРµРІРµСЂРЅС‹С… РєРѕРґРѕРІ: '..config.captcha.ncode)
+                imgui.Text(u8'Р РµРєРѕСЂРґ РІРІРѕРґР° РєР°РїС‡Рё: '..config.captcha.record)
             end
             imgui.EndChild()
         imgui.End()
     end
-    if secret_window_state.v then
-        imgui.SetNextWindowSize(imgui.ImVec2(300, 250), imgui.Cond.FirstUseEver)
-        imgui.Begin(u8'Секретные функции', secret_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
-        imgui.SetWindowPos(imgui.ImVec2(mX / 1.6, mY / 3), imgui.Cond.FirstUseEver)
-        imgui.BeginChild('secret', imgui.ImVec2(282, 213), true) 
-        if imgui.Checkbox(u8'Ограничение в 5 символов', imgui.ImBool(config.secret.max5)) then config.secret.max5 = not config.secret.max5 end
-        if imgui.Checkbox(u8'Удаление лишних символов', imgui.ImBool(config.secret.nClear)) then config.secret.nClear = not config.secret.nClear end
-	if imgui.Checkbox(u8'Авто нажатие N', imgui.ImBool(config.secret.auton)) then config.secret.auton  = not config.secret.auton end
-	if config.secret.auton then
-		imgui.SameLine()
-		imgui.PushItemWidth(120)
-		imgui.InputInt('##pipsya', waitauton)
-		if waitauton.v < 0 then waitauton.v = 0
-			elseif waitautoenter.v < 0 then waitautoenter.v = 0
-			elseif waitautozero.v < 0 then waitautozero.v = 0
-			end
-		imgui.PopItemWidth()
-	end
-        imgui.EndChild()
-        imgui.End()
-    end
     if vip_window_state.v then
-	    imgui.Begin(u8'Новое вип-меню', vip_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
+	    imgui.Begin(u8'РќРѕРІРѕРµ РІРёРї-РјРµРЅСЋ', vip_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
 		if supremeMode then
         imgui.SetNextWindowSize(imgui.ImVec2(340, 310), imgui.Cond.FirstUseEver)
         imgui.SetWindowPos(imgui.ImVec2(835, 350), imgui.Cond.FirstUseEver)
         imgui.BeginChild('vip', imgui.ImVec2(322, 275), true) 
         imgui.BeginChild('supreme', imgui.ImVec2(300, 130), true) 
-        if imgui.Button(u8'Пополнить здоровье (раз в 5 минут)') then fasthp() end
-        if imgui.Button(u8'Изменить префикс в вип-чате') then prefix() end
-        if imgui.Button(u8'Заправить транспорт, в котором я нахожусь') then fastfill() end
-        if imgui.Button(u8'Флипнуть транспорт, в котором я нахожусь') then fastflip() end
-        if imgui.Button(u8'Выдать себе NRG-500') then fastnrg() end
+        if imgui.Button(u8'РџРѕРїРѕР»РЅРёС‚СЊ Р·РґРѕСЂРѕРІСЊРµ (СЂР°Р· РІ 5 РјРёРЅСѓС‚)') then fasthp() end
+        if imgui.Button(u8'РР·РјРµРЅРёС‚СЊ РїСЂРµС„РёРєСЃ РІ РІРёРї-С‡Р°С‚Рµ') then prefix() end
+        if imgui.Button(u8'Р—Р°РїСЂР°РІРёС‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚, РІ РєРѕС‚РѕСЂРѕРј СЏ РЅР°С…РѕР¶СѓСЃСЊ') then fastfill() end
+        if imgui.Button(u8'Р¤Р»РёРїРЅСѓС‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚, РІ РєРѕС‚РѕСЂРѕРј СЏ РЅР°С…РѕР¶СѓСЃСЊ') then fastflip() end
+        if imgui.Button(u8'Р’С‹РґР°С‚СЊ СЃРµР±Рµ NRG-500') then fastnrg() end
         imgui.EndChild()
         imgui.BeginChild('solution', imgui.ImVec2(300, 60), true) 
-        if imgui.Button(u8'Получить рандомный предмет  (1 раз в 3 часа)') then items() end
-        if imgui.Button(u8'Заспавнить себя') then fastspawn() end
+        if imgui.Button(u8'РџРѕР»СѓС‡РёС‚СЊ СЂР°РЅРґРѕРјРЅС‹Р№ РїСЂРµРґРјРµС‚  (1 СЂР°Р· РІ 3 С‡Р°СЃР°)') then items() end
+        if imgui.Button(u8'Р—Р°СЃРїР°РІРЅРёС‚СЊ СЃРµР±СЏ') then fastspawn() end
         imgui.EndChild()
         imgui.BeginChild('grandrase', imgui.ImVec2(300, 60), true) 
-        if imgui.Button(u8'Получить/Продлить ADDVIP') then addvip() end
-        if imgui.Button(u8'Выдать себе любой новый автомобиль') then newcars() end
+        if imgui.Button(u8'РџРѕР»СѓС‡РёС‚СЊ/РџСЂРѕРґР»РёС‚СЊ ADDVIP') then addvip() end
+        if imgui.Button(u8'Р’С‹РґР°С‚СЊ СЃРµР±Рµ Р»СЋР±РѕР№ РЅРѕРІС‹Р№ Р°РІС‚РѕРјРѕР±РёР»СЊ') then newcars() end
         imgui.EndChild()
         imgui.EndChild()
 		elseif arenaMode then
 		imgui.SetNextWindowSize(imgui.ImVec2(340, 260), imgui.Cond.FirstUseEver)
         imgui.SetWindowPos(imgui.ImVec2(835, 350), imgui.Cond.FirstUseEver)
 		imgui.BeginChild('arena', imgui.ImVec2(300, 230), true) 
-        if imgui.Button(u8'Изменить префикс в вип-чате') then prefix() end
-        if imgui.Button(u8'Заправить транспорт, в котором я нахожусь') then fastfill() end
-        if imgui.Button(u8'Телепортировать свой транспорт к себе') then fastslet() end
-        if imgui.Button(u8'Выдать себе NRG-500') then fastnrg() end
-        if imgui.Button(u8'Посмотреть список администрации онлайн') then addvip() end
-        if imgui.Button(u8'Получить рандомный предмет  (1 раз в 3 часа)') then items() end
-        if imgui.Button(u8'Заспавнить себя') then fastspawn() end
-        if imgui.Button(u8'Флипнуть транспорт, в котором я нахожусь') then fastflip() end
-        if imgui.Button(u8'Пополнить здоровье') then fasthp() end
+        if imgui.Button(u8'РР·РјРµРЅРёС‚СЊ РїСЂРµС„РёРєСЃ РІ РІРёРї-С‡Р°С‚Рµ') then prefix() end
+        if imgui.Button(u8'Р—Р°РїСЂР°РІРёС‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚, РІ РєРѕС‚РѕСЂРѕРј СЏ РЅР°С…РѕР¶СѓСЃСЊ') then fastfill() end
+        if imgui.Button(u8'РўРµР»РµРїРѕСЂС‚РёСЂРѕРІР°С‚СЊ СЃРІРѕР№ С‚СЂР°РЅСЃРїРѕСЂС‚ Рє СЃРµР±Рµ') then fastslet() end
+        if imgui.Button(u8'Р’С‹РґР°С‚СЊ СЃРµР±Рµ NRG-500') then fastnrg() end
+        if imgui.Button(u8'РџРѕСЃРјРѕС‚СЂРµС‚СЊ СЃРїРёСЃРѕРє Р°РґРјРёРЅРёСЃС‚СЂР°С†РёРё РѕРЅР»Р°Р№РЅ') then addvip() end
+        if imgui.Button(u8'РџРѕР»СѓС‡РёС‚СЊ СЂР°РЅРґРѕРјРЅС‹Р№ РїСЂРµРґРјРµС‚  (1 СЂР°Р· РІ 3 С‡Р°СЃР°)') then items() end
+        if imgui.Button(u8'Р—Р°СЃРїР°РІРЅРёС‚СЊ СЃРµР±СЏ') then fastspawn() end
+        if imgui.Button(u8'Р¤Р»РёРїРЅСѓС‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚, РІ РєРѕС‚РѕСЂРѕРј СЏ РЅР°С…РѕР¶СѓСЃСЊ') then fastflip() end
+        if imgui.Button(u8'РџРѕРїРѕР»РЅРёС‚СЊ Р·РґРѕСЂРѕРІСЊРµ') then fasthp() end
         imgui.EndChild()
 		end
         imgui.End()
     end
     if keyboard.v then
-        imgui.PushStyleVar(imgui.StyleVar.WindowPadding, imgui.ImVec2(5.0, 2.4)) -- Фикс положения клавиш
-        imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0,0,0,0)) -- Убираем фон
+        imgui.PushStyleVar(imgui.StyleVar.WindowPadding, imgui.ImVec2(5.0, 2.4)) -- Р¤РёРєСЃ РїРѕР»РѕР¶РµРЅРёСЏ РєР»Р°РІРёС€
+        imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0,0,0,0)) -- РЈР±РёСЂР°РµРј С„РѕРЅ
         imgui.SetNextWindowPos(keyboard_pos, imgui.Cond.FirstUseEver, imgui.ImVec2(0, 0))
         imgui.Begin('##keyboard', _, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.AlwaysAutoResize + (config.keyboard.move and 0 or imgui.WindowFlags.NoMove) )
             keyboard_pos = imgui.GetWindowPos()
@@ -949,8 +913,8 @@ function imgui.OnDrawFrame()
     if servertime.v then
         imgui.SetNextWindowSize(imgui.ImVec2(194, 120), imgui.Cond.FirstUseEver)
         imgui.SetNextWindowPos(imgui.ImVec2(mX / 2, mY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-        imgui.Begin(u8'Настройки показа времени', servertime, imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
-        imgui.Text(u8'Шрифт')
+        imgui.Begin(u8'РќР°СЃС‚СЂРѕР№РєРё РїРѕРєР°Р·Р° РІСЂРµРјРµРЅРё', servertime, imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
+        imgui.Text(u8'РЁСЂРёС„С‚')
         imgui.PushItemWidth(170)
         imgui.SameLine()
             if imgui.InputText('##11', fontTimeinput) then
@@ -958,7 +922,7 @@ function imgui.OnDrawFrame()
                 renderTimeFont = renderCreateFont(config.servertime.timeFont, config.servertime.timeSize, config.servertime.timeStyle)
             end
 	imgui.PopItemWidth()
-            imgui.Text(u8'Стиль')
+            imgui.Text(u8'РЎС‚РёР»СЊ')
             imgui.PushItemWidth(90)
             imgui.SameLine()
             if imgui.InputInt('##12', styleTimeinput, 0, 0) then
@@ -967,7 +931,7 @@ function imgui.OnDrawFrame()
                 inicfg.save(config, "Shapez")
             end
 	    imgui.PopItemWidth()
-            imgui.Text(u8'Размер')
+            imgui.Text(u8'Р Р°Р·РјРµСЂ')
             imgui.PushItemWidth(90)
             imgui.SameLine()
             if imgui.InputInt('##13', sizeTimeinput, 0, 0) then
@@ -975,7 +939,7 @@ function imgui.OnDrawFrame()
                 renderTimeFont = renderCreateFont(config.servertime.timeFont, config.servertime.timeSize, config.servertime.timeStyle)
                 inicfg.save(config, "Shapez")
             end
-            if imgui.ColorEdit3(u8'Цвет времени', timeColour, imgui.ColorEditFlags.NoInputs) then
+            if imgui.ColorEdit3(u8'Р¦РІРµС‚ РІСЂРµРјРµРЅРё', timeColour, imgui.ColorEditFlags.NoInputs) then
                 config.servertime.timeR = timeColour.v[1]*255
                 config.servertime.timeG = timeColour.v[2]*255
                 config.servertime.timeB = timeColour.v[3]*255
@@ -983,7 +947,7 @@ function imgui.OnDrawFrame()
                 inicfg.save(config, "Shapez")
             end
 	    imgui.PopItemWidth()
-            if imgui.Button(u8'Изменить расположение') then servertime.v = false changePos = true sampAddChatMessage(gtag ..'Измените расположение времени курсором мыши и нажмите ЛКМ', -1) end
+            if imgui.Button(u8'РР·РјРµРЅРёС‚СЊ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ') then servertime.v = false changePos = true sampAddChatMessage(gtag ..'РР·РјРµРЅРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ РІСЂРµРјРµРЅРё РєСѓСЂСЃРѕСЂРѕРј РјС‹С€Рё Рё РЅР°Р¶РјРёС‚Рµ Р›РљРњ', -1) end
             if styleTimeinput.v < 0 then styleTimeinput.v = 0 end
             if sizeTimeinput.v < 0 then sizeTimeinput.v = 0 end
         imgui.End()
@@ -991,7 +955,7 @@ function imgui.OnDrawFrame()
 end
 
 keyboards = {
-    { -- Только цифры
+    { -- РўРѕР»СЊРєРѕ С†РёС„СЂС‹
         {
             {'1', 0x31},
             {'2', 0x32},
@@ -1009,7 +973,7 @@ keyboards = {
             {' Enter ', 0x0D},
         }
     },
-    { -- Компактные цифры
+    { -- РљРѕРјРїР°РєС‚РЅС‹Рµ С†РёС„СЂС‹
         {
             {'1', 0x31},
             {'2', 0x32},
@@ -1034,7 +998,7 @@ keyboards = {
             {' Enter ', 0x0D},
         }
     },
-    { -- Только NumPad
+    { -- РўРѕР»СЊРєРѕ NumPad
         {
             {'7', 0x67},
             {'8', 0x68},
@@ -1099,7 +1063,7 @@ function showCaptcha()
         else GenerateTextDraw(0, 259 + nextPos, 131, 3 + i * 10) end 
     end
     captchaTable = {}
-    sampShowDialog(8812, '{F89168}Проверка на робота', '{FFFFFF}Введите {C6FB4A}5{FFFFFF} символов, которые\nвидно на {C6FB4A}вашем{FFFFFF} экране.', 'Принять', 'Отмена', 1)
+    sampShowDialog(8812, '{F89168}РџСЂРѕРІРµСЂРєР° РЅР° СЂРѕР±РѕС‚Р°', '{FFFFFF}Р’РІРµРґРёС‚Рµ {C6FB4A}5{FFFFFF} СЃРёРјРІРѕР»РѕРІ, РєРѕС‚РѕСЂС‹Рµ\nРІРёРґРЅРѕ РЅР° {C6FB4A}РІР°С€РµРј{FFFFFF} СЌРєСЂР°РЅРµ.', 'РџСЂРёРЅСЏС‚СЊ', 'РћС‚РјРµРЅР°', 1)
     captime = os.clock()
 end
 
@@ -1221,7 +1185,7 @@ function showOldCaptcha()
         else GenerateOldTextDraw(0, 240 + onextPos, 130, 3 + i * 10) end
     end
     captchaTable = {}
-    sampShowDialog(8812, '{F89168}Проверка на робота', '{FFFFFF}Введите {C6FB4A}5{FFFFFF} символов, которые\nвидно на {C6FB4A}вашем{FFFFFF} экране.', 'Принять', 'Отмена', 1)
+    sampShowDialog(8812, '{F89168}РџСЂРѕРІРµСЂРєР° РЅР° СЂРѕР±РѕС‚Р°', '{FFFFFF}Р’РІРµРґРёС‚Рµ {C6FB4A}5{FFFFFF} СЃРёРјРІРѕР»РѕРІ, РєРѕС‚РѕСЂС‹Рµ\nРІРёРґРЅРѕ РЅР° {C6FB4A}РІР°С€РµРј{FFFFFF} СЌРєСЂР°РЅРµ.', 'РџСЂРёРЅСЏС‚СЊ', 'РћС‚РјРµРЅР°', 1)
     captime = os.clock()
 end
 
@@ -1470,7 +1434,7 @@ end
 
 function gotofunc(fnc)
     if fnc == "all" then
-        memory.write(5499541, 12044272, 4, false)-- ПАНОС
+        memory.write(5499541, 12044272, 4, false)-- РџРђРќРћРЎ
         memory.write(8381985, 13213544, 4, false)
     end
 end
@@ -1489,12 +1453,12 @@ function fogdist()
             local dist = arg:match("(%d+)")
             dist = tonumber(dist)
             if type(dist) ~= 'number' or dist > 3600 or dist < 0 then
-                sampAddChatMessage(tag ..'Используйте: '..goodcolor..'/'..config.commands.fdc..' [0-3600]', -1)
+                sampAddChatMessage(tag ..'РСЃРїРѕР»СЊР·СѓР№С‚Рµ: '..goodcolor..'/'..config.commands.fdc..' [0-3600]', -1)
             else
                 config.main.dist = dist
                 memory.setfloat(12044272, config.main.dist, false)
                 inicfg.save(config, "Shapez")
-                sampAddChatMessage(gtag ..'Установлена дальность прорисовки: '..badcolor..''..config.main.dist, -1)
+                sampAddChatMessage(gtag ..'РЈСЃС‚Р°РЅРѕРІР»РµРЅР° РґР°Р»СЊРЅРѕСЃС‚СЊ РїСЂРѕСЂРёСЃРѕРІРєРё: '..badcolor..''..config.main.dist, -1)
             end
         end)
         memory.setfloat(12044272, config.main.dist, false)
@@ -1598,7 +1562,7 @@ function checkBeforeLoad()
         if status == dlstatus.STATUS_ENDDOWNLOADDATA then
             updateIni = inicfg.load(nil, update_path)
             if tonumber(updateIni.info.version_n) > version_n then
-                sampAddChatMessage(tag .."Есть обновление! Версия: " .. updateIni.info.version, -1)
+                sampAddChatMessage(tag .."Р•СЃС‚СЊ РѕР±РЅРѕРІР»РµРЅРёРµ! Р’РµСЂСЃРёСЏ: " .. updateIni.info.version, -1)
                 update_state = true
             end
             os.remove(update_path)
@@ -1617,8 +1581,8 @@ function checkBeforeLoad()
 		arenaMode = false
 		locked = true
 	end
-	if locked then sampAddChatMessage(tag .. 'Вы зашли на не поддерживаемый сервер, некоторые функции не работают', -1) end
-	if locked and config.main.trainmode == 'supreme' then config.main.trainmode = 'new' sampAddChatMessage(tag .. 'Тип капчи в тренинге не поддерживается, установлен новый тип капчи', -1) end
+	if locked then sampAddChatMessage(tag .. 'Р’С‹ Р·Р°С€Р»Рё РЅР° РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Р№ СЃРµСЂРІРµСЂ, РЅРµРєРѕС‚РѕСЂС‹Рµ С„СѓРЅРєС†РёРё РЅРµ СЂР°Р±РѕС‚Р°СЋС‚', -1) end
+	if locked and config.main.trainmode == 'supreme' then config.main.trainmode = 'new' sampAddChatMessage(tag .. 'РўРёРї РєР°РїС‡Рё РІ С‚СЂРµРЅРёРЅРіРµ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ, СѓСЃС‚Р°РЅРѕРІР»РµРЅ РЅРѕРІС‹Р№ С‚РёРї РєР°РїС‡Рё', -1) end
 	print(arenaMode)
     trainmode()
     if config.main.fd then 
@@ -1633,7 +1597,7 @@ function main()
     checkBeforeLoad() wait(500)
     renderTimeFont = renderCreateFont(config.servertime.timeFont, config.servertime.timeSize, config.servertime.timeStyle)
     colorOfTime = join_argb(255, config.servertime.timeR, config.servertime.timeG, config.servertime.timeB)
-    sampAddChatMessage(tag ..'Загружен! Автор: '..goodcolor..''..author..'{ffffff}. Версия: '..goodcolor..''..version..'{ffffff}, активация: '..goodcolor..'F11.', -1)
+    sampAddChatMessage(tag ..'Р—Р°РіСЂСѓР¶РµРЅ! РђРІС‚РѕСЂ: '..goodcolor..''..author..'{ffffff}. Р’РµСЂСЃРёСЏ: '..goodcolor..''..version..'{ffffff}, Р°РєС‚РёРІР°С†РёСЏ: '..goodcolor..'F11.', -1)
     if config.main.shorten then
         sampRegisterChatCommand(config.commands.fhc, function(num) 
             sampSendChat('/findihouse '..num) 
@@ -1646,7 +1610,7 @@ function main()
         if update_state then
             downloadUrlToFile(script_url, script_path, function(id, status)
                 if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-                    sampAddChatMessage(tag .."Скрипт успешно обновлен!", -1)
+                    sampAddChatMessage(tag .."РЎРєСЂРёРїС‚ СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅ!", -1)
                     thisScript():reload()
                 end
             end)
@@ -1664,18 +1628,11 @@ function main()
                 config.servertime.timeX = cX
                 config.servertime.timeY = cY 
                 changePos = false
-                sampAddChatMessage(gtag ..'Расположение времени сохранено', -1)
+                sampAddChatMessage(gtag ..'Р Р°СЃРїРѕР»РѕР¶РµРЅРёРµ РІСЂРµРјРµРЅРё СЃРѕС…СЂР°РЅРµРЅРѕ', -1)
                 showCursor(false)
             end
             else
             renderFontDrawText(renderTimeFont, renderTime, config.servertime.timeX, config.servertime.timeY, colorOfTime, false)
-            end
-        end
-        if sampIsDialogActive() and sampGetDialogCaption():find('Проверка на робота') then
-            if config.secret.nClear then sampSetCurrentDialogEditboxText(string.gsub(sampGetCurrentDialogEditboxText(), '[^1234567890]','')) end
-            if config.secret.max5 then
-                local text = sampGetCurrentDialogEditboxText()
-                if #text > 5 then sampSetCurrentDialogEditboxText(text:sub(1, 5)) end
             end
         end
         if isKeyJustPressed(122) then
@@ -1684,13 +1641,13 @@ function main()
         local result, button, list, input = sampHasDialogRespond(8812)
         if result then
             if button == 1 then
-                if input == captcha..'0' then sampAddChatMessage(string.format(gtag ..'{ffffff}Код верный [%.3f]', os.clock() - captime), -1)
+                if input == captcha..'0' then sampAddChatMessage(string.format(gtag ..'{ffffff}РљРѕРґ РІРµСЂРЅС‹Р№ [%.3f]', os.clock() - captime), -1)
                 config.captcha.vcode = config.captcha.vcode + 1 
                 if os.clock() - captime < config.captcha.record or config.captcha.record == 0 then
                     config.captcha.record = floorStep(os.clock() - captime, 0.001)
-                    sampAddChatMessage(gtag ..'Новый рекорд ввода капчи: '..goodcolor..''..config.captcha.record..' {ffffff}сек!', -1)
+                    sampAddChatMessage(gtag ..'РќРѕРІС‹Р№ СЂРµРєРѕСЂРґ РІРІРѕРґР° РєР°РїС‡Рё: '..goodcolor..''..config.captcha.record..' {ffffff}СЃРµРє!', -1)
                 end
-                elseif input ~= captcha..'0' then sampAddChatMessage(string.format(tag ..'{ffffff}Неверный код! [%.3f] ('..captcha..'0|'..input..')', os.clock() - captime), -1) 
+                elseif input ~= captcha..'0' then sampAddChatMessage(string.format(tag ..'{ffffff}РќРµРІРµСЂРЅС‹Р№ РєРѕРґ! [%.3f] ('..captcha..'0|'..input..')', os.clock() - captime), -1) 
                     config.captcha.ncode = config.captcha.ncode + 1 
                 end
             end
@@ -1745,8 +1702,8 @@ function main()
         config.binds.flipkey = encodeJson(flipkey.v)
         config.binds.sletkey = encodeJson(sletkey.v)
         config.keyboard.active = keyboard.v
-        imgui.ShowCursor = main_window_state.v or secret_window_state.v or vip_window_state.v or servertime.v
-        imgui.Process = main_window_state.v or secret_window_state.v or vip_window_state.v or keyboard.v or servertime.v
+        imgui.ShowCursor = main_window_state.v or vip_window_state.v or servertime.v
+        imgui.Process = main_window_state.v or vip_window_state.v or keyboard.v or servertime.v
     end
 end
 
@@ -1764,23 +1721,23 @@ end
 
 function ev.onSendCommand(int)
     if int == '/vip' and (arenaMode or supremeMode) then vip_window_state.v = not vip_window_state.v return false end
-    if int == '/'..config.commands.arc..'' and config.main.ar then sync = not sync sampAddChatMessage(sync and gtag ..'Синхронизация включена' or tag ..'Синхронизация выключена', -1) return false end
-    if int == '/'..config.commands.delpc..'' and config.main.delp then delch() sampAddChatMessage(gtag ..'Все люди успешно удалены', -1) return false end
-    if int == '/'..config.commands.delcc..'' and config.main.delc then delcr() sampAddChatMessage(gtag ..'Все машины успешно удалены', -1) return false end
+    if int == '/'..config.commands.arc..'' and config.main.ar then sync = not sync sampAddChatMessage(sync and gtag ..'РЎРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ РІРєР»СЋС‡РµРЅР°' or tag ..'РЎРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ РІС‹РєР»СЋС‡РµРЅР°', -1) return false end
+    if int == '/'..config.commands.delpc..'' and config.main.delp then delch() sampAddChatMessage(gtag ..'Р’СЃРµ Р»СЋРґРё СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅС‹', -1) return false end
+    if int == '/'..config.commands.delcc..'' and config.main.delc then delcr() sampAddChatMessage(gtag ..'Р’СЃРµ РјР°С€РёРЅС‹ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅС‹', -1) return false end
 end
 
 function ev.onShowDialog(id, style, title, b1, b2, text)
     if config.main.antipodkid then
-        if id == 7372 and title:find("Торговля") then return false end
-        if title:find("Паспорт") then return false end
-        if title:find("Лицензии") then return false end
-        if title:find("Статистика") and text:find("Навык стрельбы игрока") then return false end
-		if text:find('День Прибыль') then return false end
-        if text:find('дал вам копию ключей от транспорта') then return false end
+        if id == 7372 and title:find("РўРѕСЂРіРѕРІР»СЏ") then return false end
+        if title:find("РџР°СЃРїРѕСЂС‚") then return false end
+        if title:find("Р›РёС†РµРЅР·РёРё") then return false end
+        if title:find("РЎС‚Р°С‚РёСЃС‚РёРєР°") and text:find("РќР°РІС‹Рє СЃС‚СЂРµР»СЊР±С‹ РёРіСЂРѕРєР°") then return false end
+		if text:find('Р”РµРЅСЊ РџСЂРёР±С‹Р»СЊ') then return false end
+        if text:find('РґР°Р» РІР°Рј РєРѕРїРёСЋ РєР»СЋС‡РµР№ РѕС‚ С‚СЂР°РЅСЃРїРѕСЂС‚Р°') then return false end
     end
     if id == 2760 and title:find("{BFBBBA}{ffffff}Arizona Supreme | {9758fc}VIP{ffffff} MENU") then return false end
-	if id == 7760 and title:find("Выбор") then return false end
-    if title:find("Проверка на робота") then
+	if id == 7760 and title:find("Р’С‹Р±РѕСЂ") then return false end
+    if title:find("РџСЂРѕРІРµСЂРєР° РЅР° СЂРѕР±РѕС‚Р°") then
     did = id
     start = os.clock()
     end
@@ -1791,28 +1748,17 @@ function ev.onSendDialogResponse(id, but, lis, input)
     time = os.clock() - start
     time1 = string.format("%.3f", time)
   if config.main.timer then
-    sampAddChatMessage(tag ..'Вы ввели капчу: '.. goodcolor ..'['..input..']{FFFFFF}, таймер ввода: '.. goodcolor ..'['..time1..']{FFFFFF}', -1)
+    sampAddChatMessage(tag ..'Р’С‹ РІРІРµР»Рё РєР°РїС‡Сѓ: '.. goodcolor ..'['..input..']{FFFFFF}, С‚Р°Р№РјРµСЂ РІРІРѕРґР°: '.. goodcolor ..'['..time1..']{FFFFFF}', -1)
     end
   end
-end
-
-function ev.onCreate3DText(i, clr, pos, distance, ignoreWalls, playerId, vehicleId, textd)
-	if config.secret.auton then
-		if textd:find('продается') or textd:find('Можно приобрести') and distance < 35 then
-			lua_thread.create(function()
-				wait(waitauton.v)
-				sendNkey()
-			end)
-		end
-	end
 end
 
 function ev.onServerMessage(color, text)
-  if text:find('этот бизнес ваш!') and color == 1941201407 then
+  if text:find('СЌС‚РѕС‚ Р±РёР·РЅРµСЃ РІР°С€!') and color == 1941201407 then
     config.captcha.vcode = config.captcha.vcode + 1
     if time < config.captcha.record or config.captcha.record == 0 then
         config.captcha.record = floorStep(time, 0.001)
-        sampAddChatMessage(gtag ..'Новый рекорд ввода капчи: '..goodcolor..''..config.captcha.record..' {ffffff}сек!', -1)
+        sampAddChatMessage(gtag ..'РќРѕРІС‹Р№ СЂРµРєРѕСЂРґ РІРІРѕРґР° РєР°РїС‡Рё: '..goodcolor..''..config.captcha.record..' {ffffff}СЃРµРє!', -1)
     end
     if config.main.msg then
         if config.main.texttime and config.main.textcap then sampSendChat(u8:decode(string.format('%s [%.3f] ['..sampGetCurrentDialogEditboxText()..']', config.main.text, time)))
@@ -1821,21 +1767,21 @@ function ev.onServerMessage(color, text)
         else sampSendChat(u8:decode(config.main.text)) end
     end
     if config.main.recolor and config.main.jt then 
-      sampAddChatMessage(string.format(goodcolor ..'[Информация] {FFFFFF}Поздравляю! Теперь этот бизнес ваш! [%.3f]', time), -1)
+      sampAddChatMessage(string.format(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}РџРѕР·РґСЂР°РІР»СЏСЋ! РўРµРїРµСЂСЊ СЌС‚РѕС‚ Р±РёР·РЅРµСЃ РІР°С€! [%.3f]', time), -1)
       return false
   elseif config.main.jt then 
-      sampAddChatMessage(string.format('{73B461}[Информация] {FFFFFF}Поздравляю! Теперь этот бизнес ваш! [%.3f]', time), -1)
+      sampAddChatMessage(string.format('{73B461}[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}РџРѕР·РґСЂР°РІР»СЏСЋ! РўРµРїРµСЂСЊ СЌС‚РѕС‚ Р±РёР·РЅРµСЃ РІР°С€! [%.3f]', time), -1)
       return false
   elseif config.main.recolor then
-        sampAddChatMessage(goodcolor ..'[Информация] {FFFFFF}Поздравляю! Теперь этот бизнес ваш!', -1)
+        sampAddChatMessage(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}РџРѕР·РґСЂР°РІР»СЏСЋ! РўРµРїРµСЂСЊ СЌС‚РѕС‚ Р±РёР·РЅРµСЃ РІР°С€!', -1)
         return false
     end
   end
-  if text:find('этот дом ваш!') and color == 1941201407 then 
+  if text:find('СЌС‚РѕС‚ РґРѕРј РІР°С€!') and color == 1941201407 then 
     config.captcha.vcode = config.captcha.vcode + 1
     if time < config.captcha.record or config.captcha.record == 0 then
         config.captcha.record = floorStep(time, 0.001)
-        sampAddChatMessage(gtag ..'Новый рекорд ввода капчи: '..goodcolor..''..config.captcha.record..' {ffffff}сек!', -1)
+        sampAddChatMessage(gtag ..'РќРѕРІС‹Р№ СЂРµРєРѕСЂРґ РІРІРѕРґР° РєР°РїС‡Рё: '..goodcolor..''..config.captcha.record..' {ffffff}СЃРµРє!', -1)
     end
     if config.main.msg then
         if config.main.texttime and config.main.textcap then sampSendChat(u8:decode(string.format('%s [%.3f] ['..sampGetCurrentDialogEditboxText()..']', config.main.text, time)))
@@ -1844,104 +1790,104 @@ function ev.onServerMessage(color, text)
         else sampSendChat(u8:decode(config.main.text)) end
     end
     if config.main.recolor and config.main.jt then 
-      sampAddChatMessage(string.format(goodcolor ..'[Информация] {FFFFFF}Поздравляю! Теперь этот дом ваш! [%.3f]', time), -1)
+      sampAddChatMessage(string.format(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}РџРѕР·РґСЂР°РІР»СЏСЋ! РўРµРїРµСЂСЊ СЌС‚РѕС‚ РґРѕРј РІР°С€! [%.3f]', time), -1)
       return false
   elseif config.main.jt then 
-      sampAddChatMessage(string.format('{73B461}[Информация] {FFFFFF}Поздравляю! Теперь этот дом ваш! [%.3f]', time), -1)
+      sampAddChatMessage(string.format('{73B461}[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}РџРѕР·РґСЂР°РІР»СЏСЋ! РўРµРїРµСЂСЊ СЌС‚РѕС‚ РґРѕРј РІР°С€! [%.3f]', time), -1)
       return false
   elseif config.main.recolor then
-        sampAddChatMessage(goodcolor ..'[Информация] {FFFFFF}Поздравляю! Теперь этот дом ваш!', -1)
+        sampAddChatMessage(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}РџРѕР·РґСЂР°РІР»СЏСЋ! РўРµРїРµСЂСЊ СЌС‚РѕС‚ РґРѕРј РІР°С€!', -1)
         return false
     end
   end
-  if text:find('Ответ неверный!') and color == -10270721 then 
+  if text:find('РћС‚РІРµС‚ РЅРµРІРµСЂРЅС‹Р№!') and color == -10270721 then 
     config.captcha.ncode = config.captcha.ncode + 1
     if config.main.recolor and config.main.jt then
-        sampAddChatMessage(string.format(badcolor ..'[Ошибка] {FFFFFF}Ответ неверный! [%.3f]', time), -1)
+        sampAddChatMessage(string.format(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}РћС‚РІРµС‚ РЅРµРІРµСЂРЅС‹Р№! [%.3f]', time), -1)
         return false
     elseif config.main.jt then
-        sampAddChatMessage(string.format('{FF6347}[Ошибка] {FFFFFF}Ответ неверный! [%.3f]', time), -1)
+        sampAddChatMessage(string.format('{FF6347}[РћС€РёР±РєР°] {FFFFFF}РћС‚РІРµС‚ РЅРµРІРµСЂРЅС‹Р№! [%.3f]', time), -1)
         return false
     elseif config.main.recolor then
-        sampAddChatMessage(badcolor ..'[Ошибка] {FFFFFF}Ответ неверный!', -1)
+        sampAddChatMessage(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}РћС‚РІРµС‚ РЅРµРІРµСЂРЅС‹Р№!', -1)
         return false
     end
   end
-  if text:find('Неверный код!') and color == -10270721 then 
+  if text:find('РќРµРІРµСЂРЅС‹Р№ РєРѕРґ!') and color == -10270721 then 
     config.captcha.ncode = config.captcha.ncode + 1
     if config.main.recolor and config.main.jt then 
-        sampAddChatMessage(string.format(badcolor ..'[Ошибка] {FFFFFF}Неверный код! [%.3f]', time), -1)
+        sampAddChatMessage(string.format(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}РќРµРІРµСЂРЅС‹Р№ РєРѕРґ! [%.3f]', time), -1)
         return false
     elseif config.main.jt then 
-        sampAddChatMessage(string.format('{FF6347}[Ошибка] {FFFFFF}Неверный код! [%.3f]', time), -1)
+        sampAddChatMessage(string.format('{FF6347}[РћС€РёР±РєР°] {FFFFFF}РќРµРІРµСЂРЅС‹Р№ РєРѕРґ! [%.3f]', time), -1)
         return false
     elseif config.main.recolor then
-        sampAddChatMessage(badcolor ..'[Ошибка] {FFFFFF}Неверный код!', -1)
+        sampAddChatMessage(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}РќРµРІРµСЂРЅС‹Р№ РєРѕРґ!', -1)
         return false
     end
   end
-  if text:find('Этот дом уже куплен!') and color == -10270721 then 
+  if text:find('Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєСѓРїР»РµРЅ!') and color == -10270721 then 
     if config.main.recolor and config.main.jt then 
-        sampAddChatMessage(string.format(badcolor ..'[Ошибка] {FFFFFF}Этот дом уже куплен! [%.3f]', time), -1)
+        sampAddChatMessage(string.format(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєСѓРїР»РµРЅ! [%.3f]', time), -1)
         return false
     elseif config.main.jt then 
-        sampAddChatMessage(string.format('{FF6347}[Ошибка] {FFFFFF}Этот дом уже куплен! [%.3f]', time), -1)
+        sampAddChatMessage(string.format('{FF6347}[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєСѓРїР»РµРЅ! [%.3f]', time), -1)
         return false
     elseif config.main.recolor then
-        sampAddChatMessage(badcolor ..'[Ошибка] {FFFFFF}Этот дом уже куплен!', -1)
+        sampAddChatMessage(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєСѓРїР»РµРЅ!', -1)
         return false
     end
   end
-  if text:find('Этот дом уже кем то куплен!') and color == -10270721 then 
+  if text:find('Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ!') and color == -10270721 then 
     if config.main.recolor and config.main.jt and time ~= nil then
-        sampAddChatMessage(string.format(badcolor ..'[Ошибка] {FFFFFF}Этот дом уже кем то куплен! [%.3f]', time), -1)
+        sampAddChatMessage(string.format(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ! [%.3f]', time), -1)
         return false
     elseif config.main.jt and time ~= nil then
-        sampAddChatMessage(string.format('{FF6347}[Ошибка] {FFFFFF}Этот дом уже кем то куплен! [%.3f]', time), -1)
+        sampAddChatMessage(string.format('{FF6347}[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ! [%.3f]', time), -1)
         return false
     elseif config.main.recolor then
-        sampAddChatMessage(badcolor ..'[Ошибка] {FFFFFF}Этот дом уже кем то куплен!', -1)
+        sampAddChatMessage(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ РґРѕРј СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ!', -1)
         return false
     end
   end
-  if text:find('Этот бизнес уже кем то куплен') and (color == -10270721 or color == -1347440641) then
+  if text:find('Р­С‚РѕС‚ Р±РёР·РЅРµСЃ СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ') and (color == -10270721 or color == -1347440641) then
     if config.main.recolor and config.main.jt and time ~= nil then
-        sampAddChatMessage(string.format(badcolor ..'[Ошибка] {FFFFFF}Этот бизнес уже кем то куплен! [%.3f]', time), -1)
+        sampAddChatMessage(string.format(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ Р±РёР·РЅРµСЃ СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ! [%.3f]', time), -1)
         return false
     elseif config.main.jt and time ~= nil then
-        sampAddChatMessage(string.format('{FF6347}[Ошибка] {FFFFFF}Этот бизнес уже кем то куплен! [%.3f]', time), -1)
+        sampAddChatMessage(string.format('{FF6347}[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ Р±РёР·РЅРµСЃ СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ! [%.3f]', time), -1)
         return false
     elseif config.main.recolor then
-        sampAddChatMessage(badcolor ..'[Ошибка] {FFFFFF}Этот бизнес уже кем то куплен!', -1)
+        sampAddChatMessage(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}Р­С‚РѕС‚ Р±РёР·РЅРµСЃ СѓР¶Рµ РєРµРј С‚Рѕ РєСѓРїР»РµРЅ!', -1)
         return false
     end
   end
-  if text:find('Не флуди!') and color == -10270721 then
+  if text:find('РќРµ С„Р»СѓРґРё!') and color == -10270721 then
     if config.main.recolor then
-        sampAddChatMessage(badcolor ..'[Ошибка] {FFFFFF}Не флуди!', -1)
+        sampAddChatMessage(badcolor ..'[РћС€РёР±РєР°] {FFFFFF}РќРµ С„Р»СѓРґРё!', -1)
         return false
     end
   end
-  if text:find('Вы успешно ввели капчу за') and (color == -65281 or color == 1941201407) then
+  if text:find('Р’С‹ СѓСЃРїРµС€РЅРѕ РІРІРµР»Рё РєР°РїС‡Сѓ Р·Р°') and (color == -65281 or color == 1941201407) then
     config.captcha.vcode = config.captcha.vcode + 1
     if time < config.captcha.record or config.captcha.record == 0 then
         config.captcha.record = floorStep(time, 0.001)
-        sampAddChatMessage(gtag ..'Новый рекорд ввода капчи: '..goodcolor..''..config.captcha.record..' {ffffff}сек!', -1)
+        sampAddChatMessage(gtag ..'РќРѕРІС‹Р№ СЂРµРєРѕСЂРґ РІРІРѕРґР° РєР°РїС‡Рё: '..goodcolor..''..config.captcha.record..' {ffffff}СЃРµРє!', -1)
     end
     if config.main.recolor then
-        sampAddChatMessage(string.format(goodcolor ..'[Информация] {FFFFFF}Вы успешно ввели капчу в тренинге! [%.3f]', time), -1)
+        sampAddChatMessage(string.format(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}Р’С‹ СѓСЃРїРµС€РЅРѕ РІРІРµР»Рё РєР°РїС‡Сѓ РІ С‚СЂРµРЅРёРЅРіРµ! [%.3f]', time), -1)
         return false
     end
   end
-  if text:find('Вы продали ваш бизнес') and color == 1941201407 then
+  if text:find('Р’С‹ РїСЂРѕРґР°Р»Рё РІР°С€ Р±РёР·РЅРµСЃ') and color == 1941201407 then
     if config.main.recolor then
-        sampAddChatMessage(goodcolor ..'[Информация] {FFFFFF}Вы продали ваш бизнес!', -1)
+        sampAddChatMessage(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}Р’С‹ РїСЂРѕРґР°Р»Рё РІР°С€ Р±РёР·РЅРµСЃ!', -1)
         return false
     end
   end
-  if text:find('Вы продали ваш дом') and color == 1941201407 then
+  if text:find('Р’С‹ РїСЂРѕРґР°Р»Рё РІР°С€ РґРѕРј') and color == 1941201407 then
     if config.main.recolor then
-        sampAddChatMessage(goodcolor ..'[Информация] {FFFFFF}Вы продали ваш дом!', -1)
+        sampAddChatMessage(goodcolor ..'[РРЅС„РѕСЂРјР°С†РёСЏ] {FFFFFF}Р’С‹ РїСЂРѕРґР°Р»Рё РІР°С€ РґРѕРј!', -1)
         return false
     end
   end
@@ -1962,9 +1908,6 @@ function onScriptTerminate(script, quitGame)
     if script == thisScript() then
         config.keyboard.x, config.keyboard.y = keyboard_pos.x, keyboard_pos.y
         config.main.theme = temki.v
-		config.secret.waitauton = waitauton.v
-		config.secret.waitautoenter = waitautoenter.v
-		config.secret.waitautozero = waitautozero.v
         inicfg.save(config, "Shapez")
         sampUnregisterChatCommand(config.commands.fdc)
         sampUnregisterChatCommand(config.commands.fhc)
@@ -1975,13 +1918,10 @@ end
 function onQuitGame()
     config.keyboard.x, config.keyboard.y = keyboard_pos.x, keyboard_pos.y
     config.main.theme = temki.v
-	config.secret.waitauton = waitauton.v
-	config.secret.waitautoenter = waitautoenter.v
-	config.secret.waitautozero = waitautozero.v
     inicfg.save(config, "Shapez")
 end
 
 --61 20 73 69 6d 61 6b 20 6c 6f 78
 --69 64 69 20 6e 61 78 79 69 20
 
---л эфшлц чъб
+--Р» СЌС„С€Р»С† С‡СЉР±
